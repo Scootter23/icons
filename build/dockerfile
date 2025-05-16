@@ -1,6 +1,9 @@
 FROM node:22-alpine
 WORKDIR /app
 
+# Add tini
+RUN apk add --no-cache tini
+
 COPY package.json ./
 RUN npm install
 
@@ -11,4 +14,6 @@ COPY webp/ ./webp/
 
 EXPOSE 4050
 
-CMD ["node", "server.js"]
+ENTRYPOINT ["/sbin/tini", "--"]
+
+CMD [ "node", "server.js" ]
